@@ -1,18 +1,10 @@
-// mengambil arg dari cd
-// const cmd = process.argv[2]
-// if(cmd === 'add'){
-
-// }else if(cmd === 'remove'){
-
-// }else if(cmd === 'list'){
-
-// }
 const yargs = require('yargs')
-const { simpan } = require('./contact')
+const { simpan,listContact,detailContact,deleteContact } = require('./contact')
 
+// menambah kontak
 yargs.command({
     command: 'add',
-    describe: 'Menambahkan Contact Baru',
+    describe: 'Menambahkan Kontak Baru',
     builder: {
         nama: {
             describe : 'Nama Lengkap',
@@ -34,7 +26,53 @@ yargs.command({
     handler(argv){
         simpan(argv.nama,argv.email,argv.noHp)
     }
+}).demandCommand();
+
+
+// menampilkan daftar kontak(nama & No Handphone)
+yargs.command({
+    command: 'list',
+    describe: 'Menampilkan Semua Nama & No Handphone kontak',
+    handler(){
+        listContact()
+    }
+
 })
+
+// menampilkan detail sebuah kontak
+yargs.command({
+    command: 'detail',
+    describe: 'Menampilkan Detail Sebuah kontak(Berdasarkan Nama)',
+    builder: {
+        nama: {
+            describe : 'Nama Lengkap',
+            demandOption: true,
+            type : 'string',
+        }
+    },
+
+    handler(argv){
+        detailContact(argv.nama)
+    }
+});
+
+// menghapus sebuah kontak
+yargs.command({
+    command: 'delete',
+    describe: 'Menghapus Sebuah kontak(Berdasarkan Nama)',
+    builder: {
+        nama: {
+            describe : 'Nama Lengkap',
+            demandOption: true,
+            type : 'string',
+        }
+    },
+
+    handler(argv){
+        deleteContact(argv.nama)
+    }
+});
+
 
 yargs.parse()
 
